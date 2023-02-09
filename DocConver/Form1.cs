@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Data.SqlClient;
 using Microsoft.Office.Interop.Excel;
+using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DocConver
 {
@@ -25,9 +27,8 @@ namespace DocConver
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string fileName = @"C:\Users\Lin\Documents\SLR_1675345541292.xlsx";
             Excel.Application excelApp = new Excel.Application();
-            Excel.Workbook workbook = excelApp.Workbooks.Open(fileName);
+            Excel.Workbook workbook = excelApp.Workbooks.Open(iPath.Text);
             Excel.Worksheet worksheet = workbook.Worksheets[1];
             Excel.Range range = worksheet.UsedRange;
 
@@ -42,7 +43,7 @@ namespace DocConver
                         if (row > 4 && col == range.Columns.Count)
                         {
                             String query = "INSERT INTO helpDesk (Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
-                                "VALUES(@bedrijf,@title,@naam,@urgentie,@t_i_v,@tijd_s,@status,@c,@sc,@tpye_s,@t_o_res,@t_o_rep,@t_a_t)";
+                                "VALUES(@bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
 
                             using (SqlCommand command = new SqlCommand(query, connection))
                             {
@@ -64,15 +65,15 @@ namespace DocConver
                                 command.Parameters.AddWithValue("@title", "" + col_two + "");
                                 command.Parameters.AddWithValue("@naam", "" + col_three + "");
                                 command.Parameters.AddWithValue("@urgentie", "" + col_four + "");
-                                command.Parameters.AddWithValue("@t_i_v",col_five);
-                                command.Parameters.AddWithValue("@tijd_s",col_six);
+                                command.Parameters.AddWithValue("@tijd_ind_verzoek", col_five);
+                                command.Parameters.AddWithValue("@tijd_sluiting", col_six);
                                 command.Parameters.AddWithValue("@status", "" + col_seven + "");
-                                command.Parameters.AddWithValue("@c", "" + col_eight + "");
-                                command.Parameters.AddWithValue("@sc", "" + col_nine + "");
-                                command.Parameters.AddWithValue("@tpye_s", "" + col_ten + "");
-                                command.Parameters.AddWithValue("@t_o_res", "" + col_eleven + "");
-                                command.Parameters.AddWithValue("@t_o_rep", "" + col_twelve + "");
-                                command.Parameters.AddWithValue("@t_a_t", "" + col_thirteen + "");
+                                command.Parameters.AddWithValue("@cate", "" + col_eight + "");
+                                command.Parameters.AddWithValue("@subcate", "" + col_nine + "");
+                                command.Parameters.AddWithValue("@tpye_service", "" + col_ten + "");
+                                command.Parameters.AddWithValue("@time_to_resp", "" + col_eleven + "");
+                                command.Parameters.AddWithValue("@time_to_repair", "" + col_twelve + "");
+                                command.Parameters.AddWithValue("@total_act_time", "" + col_thirteen + "");
                                 //MessageBox.Show(col_five.ToString());
                                 command.ExecuteNonQuery();
                             }
@@ -102,7 +103,6 @@ namespace DocConver
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string filePath = "C:\\Users\\Lin\\Downloads\\result.xlsx";
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook workbook = excelApp.Workbooks.Add();
             Excel.Worksheet worksheet = workbook.Worksheets[1];
@@ -116,6 +116,11 @@ namespace DocConver
             range.Cells[1, 3].value = "Gesloten Incidents";
             range.Cells[1, 4].value = "Gesloten Problems";
             range.Cells[1, 5].value = "Gesloten Service Requests";
+            range.Cells[1, 6].value = "Instroom Changes";
+            range.Cells[1, 7].value = "Instroom Incidents";
+            range.Cells[1, 8].value = "Instroom Problems";
+            range.Cells[1, 9].value = "Instroom Service Requests";
+
             range.Cells[2, 1].value = bd + " tot " + ed;
 
             SqlConnection conn = new SqlConnection(connectionString);
@@ -124,7 +129,11 @@ namespace DocConver
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Change' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'",
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Incident' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'",
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Problem' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'",
-                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Request' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'"
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Request' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'",
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Change' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Incident' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Problem' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Request' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'"
             };
             int[] result = new int[4];
             for (int i = 0; i < qeurys.Length; i++)
@@ -135,19 +144,33 @@ namespace DocConver
                 range.Cells[2, i+2].value = count;
             }
 
-            workbook.SaveAs("C:\\Users\\Lin\\Downloads\\result.xlsx");
+            workbook.SaveAs(""+oPath.Text+"\\data.xlsx");
+            System.Diagnostics.Process.Start("" + oPath.Text + "\\data.xlsx");
             conn.Close();
             workbook.Close();
             excelApp.Quit();
 
-            MessageBox.Show("Downloads path: " + filePath);
-
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "select file";
+            openFileDialog.Filter = "excel|*.xlsx";
+            openFileDialog.Multiselect = false;
+            openFileDialog.ShowDialog();
+            iPath.Text = openFileDialog.FileName;
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog folderDlg = new FolderBrowserDialog();
+            folderDlg.ShowNewFolderButton = true;
+            DialogResult result = folderDlg.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                oPath.Text = folderDlg.SelectedPath;
+            }
+        }
     }
 }

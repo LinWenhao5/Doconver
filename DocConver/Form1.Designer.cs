@@ -35,6 +35,12 @@
             this.eindDatum = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.iPath = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.oPath = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -43,27 +49,27 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(102, 23);
             this.button1.TabIndex = 0;
-            this.button1.Text = "excel uploaden";
+            this.button1.Text = "Uploaden";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(172, 83);
+            this.button2.Location = new System.Drawing.Point(64, 323);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(132, 23);
             this.button2.TabIndex = 1;
-            this.button2.Text = "verwijderen";
+            this.button2.Text = "Data verwijderen";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(64, 260);
+            this.button3.Location = new System.Drawing.Point(64, 261);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 2;
-            this.button3.Text = "Analyse";
+            this.button3.Text = "Export";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -76,7 +82,7 @@
             // 
             // eindDatum
             // 
-            this.eindDatum.Location = new System.Drawing.Point(64, 234);
+            this.eindDatum.Location = new System.Drawing.Point(280, 179);
             this.eindDatum.Name = "eindDatum";
             this.eindDatum.Size = new System.Drawing.Size(200, 20);
             this.eindDatum.TabIndex = 5;
@@ -89,22 +95,79 @@
             this.label1.Size = new System.Drawing.Size(25, 13);
             this.label1.TabIndex = 6;
             this.label1.Text = "van";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(61, 218);
+            this.label2.Location = new System.Drawing.Point(277, 163);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(19, 13);
             this.label2.TabIndex = 7;
             this.label2.Text = "tot";
             // 
+            // iPath
+            // 
+            this.iPath.Location = new System.Drawing.Point(64, 57);
+            this.iPath.Name = "iPath";
+            this.iPath.Size = new System.Drawing.Size(232, 20);
+            this.iPath.TabIndex = 8;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(63, 41);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(54, 13);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "input path";
+            // 
+            // oPath
+            // 
+            this.oPath.Location = new System.Drawing.Point(64, 235);
+            this.oPath.Name = "oPath";
+            this.oPath.Size = new System.Drawing.Size(211, 20);
+            this.oPath.TabIndex = 10;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(63, 219);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(61, 13);
+            this.label4.TabIndex = 11;
+            this.label4.Text = "output path";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(302, 55);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(69, 23);
+            this.button4.TabIndex = 12;
+            this.button4.Text = "Selecteer";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(281, 232);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(75, 23);
+            this.button5.TabIndex = 13;
+            this.button5.Text = "Selecteer";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(335, 386);
+            this.ClientSize = new System.Drawing.Size(508, 386);
+            this.Controls.Add(this.button5);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.oPath);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.iPath);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.eindDatum);
@@ -128,6 +191,12 @@
         private System.Windows.Forms.DateTimePicker eindDatum;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox iPath;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox oPath;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button button5;
     }
 }
 
