@@ -40,26 +40,26 @@ namespace DocConver
                 {
                     for (int col = 1; col <= range.Columns.Count; col++)
                     {
-                        if (row > 4 && col == range.Columns.Count)
+                        if (row > y.Value && col == range.Columns.Count)
                         {
                             String query = "INSERT INTO helpDesk (Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
                                 "VALUES(@bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
 
                             using (SqlCommand command = new SqlCommand(query, connection))
                             {
-                                string col_one = range.Cells[row, 3].value2;
-                                string col_two = range.Cells[row, 4].value2;
-                                string col_three = range.Cells[row, 5].value2;
-                                string col_four = range.Cells[row, 6].value2;
-                                DateTime col_five = DateTime.Parse(range.Cells[row, 7].value2);
-                                DateTime col_six = DateTime.Parse(range.Cells[row, 8].value2);
-                                string col_seven = range.Cells[row, 9].value2;
-                                string col_eight = range.Cells[row, 10].value2;
-                                string col_nine = range.Cells[row, 11].value2;
-                                string col_ten = range.Cells[row, 12].value2;
-                                string col_eleven = range.Cells[row, 13].value2;
-                                string col_twelve = range.Cells[row, 14].value2;
-                                string col_thirteen = range.Cells[row, 15].value2;
+                                string col_one = range.Cells[row, x.Value].value2;
+                                string col_two = range.Cells[row, x.Value+1].value2;
+                                string col_three = range.Cells[row, x.Value+2].value2;
+                                string col_four = range.Cells[row, x.Value+3].value2;
+                                DateTime col_five = DateTime.Parse(range.Cells[row, x.Value+4].value2);
+                                DateTime col_six = DateTime.Parse(range.Cells[row, x.Value+5].value2);
+                                string col_seven = range.Cells[row, x.Value+6].value2;
+                                string col_eight = range.Cells[row, x.Value+7].value2;
+                                string col_nine = range.Cells[row, x.Value+8].value2;
+                                string col_ten = range.Cells[row, x.Value+9].value2;
+                                string col_eleven = range.Cells[row, x.Value+10].value2;
+                                string col_twelve = range.Cells[row, x.Value+11].value2;
+                                string col_thirteen = range.Cells[row, x.Value+12].value2;
 
                                 command.Parameters.AddWithValue("@bedrijf", "" + col_one + "");
                                 command.Parameters.AddWithValue("@title", "" + col_two + "");
@@ -74,7 +74,6 @@ namespace DocConver
                                 command.Parameters.AddWithValue("@time_to_resp", "" + col_eleven + "");
                                 command.Parameters.AddWithValue("@time_to_repair", "" + col_twelve + "");
                                 command.Parameters.AddWithValue("@total_act_time", "" + col_thirteen + "");
-                                //MessageBox.Show(col_five.ToString());
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -171,11 +170,6 @@ namespace DocConver
             {
                 oPath.Text = folderDlg.SelectedPath;
             }
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }
