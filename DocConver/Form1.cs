@@ -25,7 +25,7 @@ namespace DocConver
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void excel_uploaden_to_database_Click(object sender, EventArgs e)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook workbook = excelApp.Workbooks.Open(iPath.Text);
@@ -87,7 +87,7 @@ namespace DocConver
             MessageBox.Show("data has been send");
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void empty_database_Click(object sender, EventArgs e)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -100,7 +100,7 @@ namespace DocConver
             MessageBox.Show("data has been cleared");
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void export_data_to_excel_Click(object sender, EventArgs e)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook workbook = excelApp.Workbooks.Add();
@@ -151,7 +151,7 @@ namespace DocConver
 
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void select_file_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "select file";
@@ -161,7 +161,7 @@ namespace DocConver
             iPath.Text = openFileDialog.FileName;
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void select_folder_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog folderDlg = new FolderBrowserDialog();
             folderDlg.ShowNewFolderButton = true;
