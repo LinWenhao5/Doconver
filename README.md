@@ -11,7 +11,7 @@ A file analysis software
 
 ## Exe Install
 
-[Google Drive](https://drive.google.com/drive/folders/1-GxmMY94aNZfXRuJjl23Hr_7EV3ZB-2Bg)
+[Google Drive](https://drive.google.com/drive/folders/1-GxmMY94aNZfXRuJjl23Hr_7EV3ZB-2B?usp=sharing)
 
 
 ## Screenshots
