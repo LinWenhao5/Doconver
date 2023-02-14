@@ -19,7 +19,7 @@ namespace DocConver
     public partial class Form1 : Form
     {
 
-        public string connectionString = "Data Source=DESKTOP-6K3QQ5H\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private string connectionString = "Data Source=DESKTOP-6K3QQ5H\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public Form1()
         {
             InitializeComponent();
@@ -40,7 +40,7 @@ namespace DocConver
                 {
                     for (int col = 1; col <= range.Columns.Count; col++)
                     {
-                        if (row > y.Value && col == range.Columns.Count)
+                        if (row >= y.Value && col == range.Columns.Count)
                         {
                             String query = "INSERT INTO helpDesk (Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
                                 "VALUES(@bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
@@ -52,7 +52,6 @@ namespace DocConver
                                 string col_three = range.Cells[row, x.Value+2].value2;
                                 string col_four = range.Cells[row, x.Value+3].value2;
                                 DateTime col_five = DateTime.Parse(range.Cells[row, x.Value+4].value2);
-                                DateTime col_six = DateTime.Parse(range.Cells[row, x.Value+5].value2);
                                 string col_seven = range.Cells[row, x.Value+6].value2;
                                 string col_eight = range.Cells[row, x.Value+7].value2;
                                 string col_nine = range.Cells[row, x.Value+8].value2;
@@ -66,7 +65,15 @@ namespace DocConver
                                 command.Parameters.AddWithValue("@naam", "" + col_three + "");
                                 command.Parameters.AddWithValue("@urgentie", "" + col_four + "");
                                 command.Parameters.AddWithValue("@tijd_ind_verzoek", col_five);
-                                command.Parameters.AddWithValue("@tijd_sluiting", col_six);
+                                if (range.Cells[row, x.Value + 5].value2 != null)
+                                {
+                                    DateTime col_six = DateTime.Parse(range.Cells[row, x.Value + 5].value2);
+                                    command.Parameters.AddWithValue("@tijd_sluiting", col_six);
+                                } else
+                                {
+                                    DateTime col_six = DateTime.MaxValue;
+                                    command.Parameters.AddWithValue("@tijd_sluiting", col_six);
+                                }
                                 command.Parameters.AddWithValue("@status", "" + col_seven + "");
                                 command.Parameters.AddWithValue("@cate", "" + col_eight + "");
                                 command.Parameters.AddWithValue("@subcate", "" + col_nine + "");
@@ -82,7 +89,7 @@ namespace DocConver
                 }
                connection.Close();
             }
-            workbook.Close();
+            workbook.Close(); 
             excelApp.Quit();
             MessageBox.Show("data has been send");
         }
@@ -129,10 +136,10 @@ namespace DocConver
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Incident' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'",
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Problem' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'",
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Request' AND Status='Gesloten' AND [Tijd sluiting] BETWEEN '"+bd+"' AND '"+ed+"'",
-                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Change' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
-                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Incident' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
-                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Problem' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
-                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Request' AND Status='Gesloten' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'"
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Change' AND Status='Pending' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Incident' AND Status='Pending' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Problem' AND Status='Pending' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
+                "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Request' AND Status='Pending' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'"
             };
             int[] result = new int[4];
             for (int i = 0; i < qeurys.Length; i++)
@@ -162,7 +169,7 @@ namespace DocConver
         }
 
         private void select_folder_Click(object sender, EventArgs e)
-        {
+        {  
             FolderBrowserDialog folderDlg = new FolderBrowserDialog();
             folderDlg.ShowNewFolderButton = true;
             DialogResult result = folderDlg.ShowDialog();
