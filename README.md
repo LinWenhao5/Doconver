@@ -16,7 +16,7 @@ A file analysis software
 
 ## Screenshots
 
-![App Screenshot](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/9ece82f0-ed7e-450d-a6b9-21efbbf1eb49/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20230213%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230213T134629Z&X-Amz-Expires=86400&X-Amz-Signature=27d6e3545d3820e08bb7049ab89f792d810097a76fdad996d5ba76703ef169f2&X-Amz-SignedHeaders=host&response-content-disposition=filename%3D%22Untitled.png%22&x-id=GetObject)
+![App Screenshot](https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2Fbbebc2ea-70e6-415f-b926-948ebefbe29d%2FSchermafbeelding_2023-02-14_162827.png?id=ec72d618-9230-4ecb-95a4-a6bf059d66e1&table=block&spaceId=36494278-cf5b-4253-bd75-74bfb4fc9fb4&width=900&userId=9ce7b239-d03a-4f93-8fd3-5b55571667fe&cache=v2t)
 
 
 ## Tech Stack
