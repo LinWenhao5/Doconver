@@ -9,6 +9,9 @@ A file analysis software
 - Automatic generation of powerBI reports
 - The above features are for specific cases only (not generic software)
 
+## Exe Install
+
+[Google Drive](https://drive.google.com/drive/folders/1-GxmMY94aNZfXRuJjl23Hr_7EV3ZB-2Bg)
 
 
 ## Screenshots
