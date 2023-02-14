@@ -18,11 +18,27 @@ namespace DocConver
 {
     public partial class Form1 : Form
     {
-
-        private string connectionString = "Data Source=DESKTOP-6K3QQ5H\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        private string connectionString;
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void connect_string_Click(object sender, EventArgs e)
+        {
+            connectionString = conn.Text;
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    MessageBox.Show("connection successful");
+                    connection.Close();
+                } catch (SqlException)
+                {
+                    MessageBox.Show("connection failed");
+                }
+            }
         }
 
         private void excel_uploaden_to_database_Click(object sender, EventArgs e)
@@ -51,7 +67,12 @@ namespace DocConver
                                 string col_two = range.Cells[row, x.Value+1].value2;
                                 string col_three = range.Cells[row, x.Value+2].value2;
                                 string col_four = range.Cells[row, x.Value+3].value2;
-                                DateTime col_five = DateTime.Parse(range.Cells[row, x.Value+4].value2);
+                                DateTime col_five = DateTime.Parse(range.Cells[row, x.Value + 4].value2);
+                                DateTime col_six = DateTime.MaxValue;
+                                if (range.Cells[row, x.Value + 5].value2 != null)
+                                {
+                                    col_six = DateTime.Parse(range.Cells[row, x.Value + 5].value2);
+                                }
                                 string col_seven = range.Cells[row, x.Value+6].value2;
                                 string col_eight = range.Cells[row, x.Value+7].value2;
                                 string col_nine = range.Cells[row, x.Value+8].value2;
@@ -65,15 +86,7 @@ namespace DocConver
                                 command.Parameters.AddWithValue("@naam", "" + col_three + "");
                                 command.Parameters.AddWithValue("@urgentie", "" + col_four + "");
                                 command.Parameters.AddWithValue("@tijd_ind_verzoek", col_five);
-                                if (range.Cells[row, x.Value + 5].value2 != null)
-                                {
-                                    DateTime col_six = DateTime.Parse(range.Cells[row, x.Value + 5].value2);
-                                    command.Parameters.AddWithValue("@tijd_sluiting", col_six);
-                                } else
-                                {
-                                    DateTime col_six = DateTime.MaxValue;
-                                    command.Parameters.AddWithValue("@tijd_sluiting", col_six);
-                                }
+                                command.Parameters.AddWithValue("@tijd_sluiting", col_six);
                                 command.Parameters.AddWithValue("@status", "" + col_seven + "");
                                 command.Parameters.AddWithValue("@cate", "" + col_eight + "");
                                 command.Parameters.AddWithValue("@subcate", "" + col_nine + "");
@@ -177,6 +190,17 @@ namespace DocConver
             {
                 oPath.Text = folderDlg.SelectedPath;
             }
+        }
+
+        private void create_sql_table_Click(object sender, EventArgs e)
+        {
+            string query = "CREATE TABLE [dbo].[helpDesk] (\r\n    [id]                    INT           IDENTITY (1, 1) NOT NULL,\r\n    [Bedrijf]               VARCHAR (100) NULL,\r\n    [Title]                 TEXT          NULL,\r\n    [Naam verzoeker]        VARCHAR (50)  NULL,\r\n    [Urgentie]              VARCHAR (50)  NULL,\r\n    [Tijd indienen verzoek] DATETIME2 (7) NULL,\r\n    [Tijd sluiting]         DATETIME2 (7) NULL,\r\n    [Status]                VARCHAR (50)  NULL,\r\n    [Categorie]             NVARCHAR (50) NULL,\r\n    [Subcategorie]          VARCHAR (50)  NULL,\r\n    [Type serviceverzoek]   VARCHAR (50)  NULL,\r\n    [Time to Respond]       VARCHAR (50)  NULL,\r\n    [Time to Repair]        VARCHAR (50)  NULL,\r\n    [Total Activities time] VARCHAR (50)  NULL\r\n);\r\n\r\n";
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            SqlCommand cmd = new SqlCommand(query, conn);
+            cmd.ExecuteNonQuery();
+            MessageBox.Show("Create successfully");
+            conn.Close();  
         }
     }
 }
