@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
@@ -37,10 +38,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.iPath = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.oPath = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
             this.x = new System.Windows.Forms.NumericUpDown();
             this.y = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -50,8 +48,10 @@
             this.conn = new System.Windows.Forms.TextBox();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.x)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.y)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -66,17 +66,17 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(6, 425);
+            this.button2.Location = new System.Drawing.Point(15, 408);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(132, 23);
             this.button2.TabIndex = 1;
-            this.button2.Text = "Data verwijderen";
+            this.button2.Text = "TRUNCATE TABLE data";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.empty_database_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(6, 379);
+            this.button3.Location = new System.Drawing.Point(3, 336);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 2;
@@ -86,14 +86,14 @@
             // 
             // beginDatum
             // 
-            this.beginDatum.Location = new System.Drawing.Point(6, 312);
+            this.beginDatum.Location = new System.Drawing.Point(6, 289);
             this.beginDatum.Name = "beginDatum";
             this.beginDatum.Size = new System.Drawing.Size(200, 20);
             this.beginDatum.TabIndex = 3;
             // 
             // eindDatum
             // 
-            this.eindDatum.Location = new System.Drawing.Point(222, 312);
+            this.eindDatum.Location = new System.Drawing.Point(222, 289);
             this.eindDatum.Name = "eindDatum";
             this.eindDatum.Size = new System.Drawing.Size(200, 20);
             this.eindDatum.TabIndex = 5;
@@ -101,7 +101,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 296);
+            this.label1.Location = new System.Drawing.Point(3, 273);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(25, 13);
             this.label1.TabIndex = 6;
@@ -110,7 +110,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(219, 296);
+            this.label2.Location = new System.Drawing.Point(219, 273);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(19, 13);
             this.label2.TabIndex = 7;
@@ -132,22 +132,6 @@
             this.label3.TabIndex = 9;
             this.label3.Text = "input path";
             // 
-            // oPath
-            // 
-            this.oPath.Location = new System.Drawing.Point(6, 353);
-            this.oPath.Name = "oPath";
-            this.oPath.Size = new System.Drawing.Size(211, 20);
-            this.oPath.TabIndex = 10;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(5, 337);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(61, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "output path";
-            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(248, 136);
@@ -157,16 +141,6 @@
             this.button4.Text = "Selecteer";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.select_file_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(223, 350);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(75, 23);
-            this.button5.TabIndex = 13;
-            this.button5.Text = "Selecteer";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.select_folder_Click);
             // 
             // x
             // 
@@ -259,10 +233,7 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.y);
             this.Controls.Add(this.x);
-            this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.oPath);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.iPath);
             this.Controls.Add(this.label2);
@@ -276,6 +247,7 @@
             this.Text = "Doconvert";
             ((System.ComponentModel.ISupportInitialize)(this.x)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.y)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -292,10 +264,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox iPath;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox oPath;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.NumericUpDown x;
         private System.Windows.Forms.NumericUpDown y;
         private System.Windows.Forms.Label label5;
@@ -305,6 +274,7 @@
         private System.Windows.Forms.TextBox conn;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.BindingSource bindingSource1;
     }
 }
 

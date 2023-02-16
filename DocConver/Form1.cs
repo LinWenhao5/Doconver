@@ -18,7 +18,7 @@ namespace DocConver
 {
     public partial class Form1 : Form
     {
-        private string connectionString;
+        private string connectionString = "Data Source=DESKTOP-6K3QQ5H\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
         public Form1()
         {
             InitializeComponent();
@@ -112,7 +112,7 @@ namespace DocConver
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
 
-            String Query = "TRUNCATE TABLE helpDesk";
+            String Query = "TRUNCATE TABLE data";
             SqlCommand cmd = new SqlCommand(Query, conn);
             cmd.ExecuteNonQuery();
 
@@ -122,25 +122,8 @@ namespace DocConver
 
         private void export_data_to_excel_Click(object sender, EventArgs e)
         {
-            Excel.Application excelApp = new Excel.Application();
-            Excel.Workbook workbook = excelApp.Workbooks.Add();
-            Excel.Worksheet worksheet = workbook.Worksheets[1];
-            Excel.Range range = worksheet.UsedRange;
-
-            string bd =  beginDatum.Value.ToString("yyyy-MM-dd");
+            string bd = beginDatum.Value.ToString("yyyy-MM-dd");
             string ed = eindDatum.Value.ToString("yyyy-MM-dd");
-
-            range.Cells[1, 1].value = "Tijdsperiode";
-            range.Cells[1, 2].value = "Gesloten Changes";
-            range.Cells[1, 3].value = "Gesloten Incidents";
-            range.Cells[1, 4].value = "Gesloten Problems";
-            range.Cells[1, 5].value = "Gesloten Service Requests";
-            range.Cells[1, 6].value = "Instroom Changes";
-            range.Cells[1, 7].value = "Instroom Incidents";
-            range.Cells[1, 8].value = "Instroom Problems";
-            range.Cells[1, 9].value = "Instroom Service Requests";
-
-            range.Cells[2, 1].value = bd + " tot " + ed;
 
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -154,21 +137,21 @@ namespace DocConver
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Problem' AND Status='Pending' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'",
                 "SELECT COUNT(*) FROM helpDesk WHERE [Type serviceverzoek]='Request' AND Status='Pending' AND [Tijd indienen verzoek] BETWEEN '"+bd+"' AND '"+ed+"'"
             };
-            int[] result = new int[4];
+
+            int[] data = new int[8];
             for (int i = 0; i < qeurys.Length; i++)
             {
-                Debug.WriteLine(qeurys[i]);
                 SqlCommand cmd = new SqlCommand(qeurys[i], conn);
                 Int32 count = (Int32)(cmd.ExecuteScalar());
-                range.Cells[2, i+2].value = count;
+                Debug.WriteLine(qeurys[i]);
+                data[i] = count;
             }
-
-            workbook.SaveAs(""+oPath.Text+"\\data.xlsx");
-            System.Diagnostics.Process.Start("" + oPath.Text + "\\data.xlsx");
+            string query = "INSERT INTO data (Tijdsperiode, [Gesloten Changes], [Gesloten Incidents], [Gesloten Problems], [Gesloten Service Requests], [Instroom Changes], [Instroom Incidents], [Instroom Problems], [Instroom Service Requests])" +
+                "VALUES ('"+bd+" - "+ed+"', " + data[0] + ", " + data[1] + ", " + data[2] + ", "+data[3]+ ", "+data[4]+ ", "+data[5]+ ", "+data[6]+ ", "+data[7]+")";
+            SqlCommand cmd_two = new SqlCommand(query, conn);
+            cmd_two.ExecuteNonQuery();
             conn.Close();
-            workbook.Close();
-            excelApp.Quit();
-
+            MessageBox.Show("data is stored in dbo.data");
         }
 
         private void select_file_Click(object sender, EventArgs e)
@@ -181,20 +164,10 @@ namespace DocConver
             iPath.Text = openFileDialog.FileName;
         }
 
-        private void select_folder_Click(object sender, EventArgs e)
-        {  
-            FolderBrowserDialog folderDlg = new FolderBrowserDialog();
-            folderDlg.ShowNewFolderButton = true;
-            DialogResult result = folderDlg.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                oPath.Text = folderDlg.SelectedPath;
-            }
-        }
-
         private void create_sql_table_Click(object sender, EventArgs e)
         {
-            string query = "CREATE TABLE [dbo].[helpDesk] (\r\n    [id]                    INT           IDENTITY (1, 1) NOT NULL,\r\n    [Bedrijf]               VARCHAR (100) NULL,\r\n    [Title]                 TEXT          NULL,\r\n    [Naam verzoeker]        VARCHAR (50)  NULL,\r\n    [Urgentie]              VARCHAR (50)  NULL,\r\n    [Tijd indienen verzoek] DATETIME2 (7) NULL,\r\n    [Tijd sluiting]         DATETIME2 (7) NULL,\r\n    [Status]                VARCHAR (50)  NULL,\r\n    [Categorie]             NVARCHAR (50) NULL,\r\n    [Subcategorie]          VARCHAR (50)  NULL,\r\n    [Type serviceverzoek]   VARCHAR (50)  NULL,\r\n    [Time to Respond]       VARCHAR (50)  NULL,\r\n    [Time to Repair]        VARCHAR (50)  NULL,\r\n    [Total Activities time] VARCHAR (50)  NULL\r\n);\r\n\r\n";
+            string query = "CREATE TABLE [dbo].[helpDesk] (\r\n    [id]                    INT           IDENTITY (1, 1) NOT NULL,\r\n    [Bedrijf]               VARCHAR (100) NULL,\r\n    [Title]                 TEXT          NULL,\r\n    [Naam verzoeker]        VARCHAR (50)  NULL,\r\n    [Urgentie]              VARCHAR (50)  NULL,\r\n    [Tijd indienen verzoek] DATETIME2 (7) NULL,\r\n    [Tijd sluiting]         DATETIME2 (7) NULL,\r\n    [Status]                VARCHAR (50)  NULL,\r\n    [Categorie]             NVARCHAR (50) NULL,\r\n    [Subcategorie]          VARCHAR (50)  NULL,\r\n    [Type serviceverzoek]   VARCHAR (50)  NULL,\r\n    [Time to Respond]       VARCHAR (50)  NULL,\r\n    [Time to Repair]        VARCHAR (50)  NULL,\r\n    [Total Activities time] VARCHAR (50)  NULL\r\n);\r\n\r\n" +
+                "CREATE TABLE [dbo].[data] (\r\n\t[id]                    INT           IDENTITY (1, 1) NOT NULL,\r\n    [Tijdsperiode]              VARCHAR (50) NULL,\r\n    [Gesloten Changes]          INT          NULL,\r\n    [Gesloten Incidents]        INT          NULL,\r\n    [Gesloten Problems]         INT          NULL,\r\n    [Gesloten Service Requests] INT          NULL,\r\n    [Instroom Changes]          INT          NULL,\r\n    [Instroom Incidents]        INT          NULL,\r\n    [Instroom Problems]         INT          NULL,\r\n    [Instroom Service Requests] INT          NULL\r\n);\r\n\r\n";
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
             SqlCommand cmd = new SqlCommand(query, conn);
