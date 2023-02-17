@@ -16,10 +16,10 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace DocConver
 {
-    public partial class Form1 : Form
+    public partial class servicedesk : Form
     {
-        private string connectionString = "Data Source=DESKTOP-6K3QQ5H\\SQLEXPRESS;Initial Catalog=test;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-        public Form1()
+        private string connectionString;
+        public servicedesk()
         {
             InitializeComponent();
         }
@@ -147,7 +147,7 @@ namespace DocConver
                 data[i] = count;
             }
             string query = "INSERT INTO data (Tijdsperiode, [Gesloten Changes], [Gesloten Incidents], [Gesloten Problems], [Gesloten Service Requests], [Instroom Changes], [Instroom Incidents], [Instroom Problems], [Instroom Service Requests])" +
-                "VALUES ('"+bd+" - "+ed+"', " + data[0] + ", " + data[1] + ", " + data[2] + ", "+data[3]+ ", "+data[4]+ ", "+data[5]+ ", "+data[6]+ ", "+data[7]+")";
+                "VALUES ('"+bd+"/"+ed+"', " + data[0] + ", " + data[1] + ", " + data[2] + ", "+data[3]+ ", "+data[4]+ ", "+data[5]+ ", "+data[6]+ ", "+data[7]+")";
             SqlCommand cmd_two = new SqlCommand(query, conn);
             cmd_two.ExecuteNonQuery();
             conn.Close();
