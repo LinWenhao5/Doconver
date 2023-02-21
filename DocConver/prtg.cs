@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using System.Configuration;
 
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
@@ -19,7 +20,7 @@ namespace DocConver
 {
     public partial class prtg : Form
     {
-        private string connectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["localhost"].ConnectionString;
         public prtg()
         {
             InitializeComponent();
@@ -30,25 +31,7 @@ namespace DocConver
 
         }
 
-        private void button6_Click(object sender, EventArgs e)
-        {
-            connectionString = conn.Text;
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    MessageBox.Show("connection successful");
-                    connection.Close();
-                }
-                catch (SqlException)
-                {
-                    MessageBox.Show("connection failed");
-                }
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
+        private void read_data(object sender, EventArgs e)
         {
             string file = iPath.Text;
             PdfReader pdfRead = new PdfReader(file);
@@ -60,15 +43,16 @@ namespace DocConver
                 {
                     ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
                     string input = PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(page), strategy);
-                    string pattern = @"Beschikbaarheid Stats: (\w+): (\d+ %)";
+                    string pattern = @"Probe, Groep, Apparaat:(?<apparaat>.*)\nBeschikbaarheid Stats: (?<status>\w+): (?<percentage>\d*)";
                     Match match = Regex.Match(input, pattern);
                     if (match.Success)
                     {
-                        String qeury = "INSERT INTO prtg ([Beschikbaarheid Stats], Percentage) VALUES (@value1, @value2)";
+                        String qeury = "INSERT INTO prtg (Apparaat, [Beschikbaarheid Stats], Percentage) VALUES (@value1, @value2, @value3)";
                         using (SqlCommand command = new SqlCommand(qeury, connection))
                         {
-                            command.Parameters.AddWithValue("@value1", match.Groups[1].Value);
-                            command.Parameters.AddWithValue("@value2", match.Groups[2].Value);
+                            command.Parameters.AddWithValue("@value1", match.Groups["apparaat"].Value);
+                            command.Parameters.AddWithValue("@value2", match.Groups["status"].Value);
+                            command.Parameters.AddWithValue("@value3", match.Groups["percentage"].Value);
                             command.ExecuteNonQuery();
                         }
                     }
@@ -78,7 +62,7 @@ namespace DocConver
             MessageBox.Show("data has been stored in dbo.ptrg");
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void empty_prtg(object sender, EventArgs e)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -91,7 +75,7 @@ namespace DocConver
             MessageBox.Show("data has been cleared");
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void select_file(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "select file";
@@ -99,17 +83,6 @@ namespace DocConver
             openFileDialog.Multiselect = false;
             openFileDialog.ShowDialog();
             iPath.Text = openFileDialog.FileName;
-        }
-
-        private void button7_Click(object sender, EventArgs e)
-        {
-            string query = "CREATE TABLE [dbo].[prtg] (\r\n    [id]                    INT          IDENTITY (1, 1) NOT NULL,\r\n    [Beschikbaarheid Stats] VARCHAR (50) NULL,\r\n    [Percentage]            VARCHAR (50) NULL\r\n);\r\n";
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
-            SqlCommand cmd = new SqlCommand(query, conn);
-            cmd.ExecuteNonQuery();
-            MessageBox.Show("Create successfully");
-            conn.Close();
         }
     }
 }
