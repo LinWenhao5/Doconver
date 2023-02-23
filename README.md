@@ -15,7 +15,7 @@ A file analysis software
 
 ## Screenshots
 
-![Schermafbeelding 2023-02-14 162827.png](https://i.ibb.co/rt9g6dB/Schermafbeelding-2023-02-14-162827.png)
+![menu](https://i.ibb.co/Mndg6d4/Schermafbeelding-2023-02-23-113159.png)
 
 ## Tech Stack
 
