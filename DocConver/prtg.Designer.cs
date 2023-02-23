@@ -43,7 +43,7 @@
             this.button1.TabIndex = 30;
             this.button1.Text = "data lezen";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.read_data);
+            this.button1.Click += new System.EventHandler(this.readData);
             // 
             // button2
             // 
@@ -53,7 +53,7 @@
             this.button2.TabIndex = 31;
             this.button2.Text = "TRUNCATE TABLE data";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.empty_prtg);
+            this.button2.Click += new System.EventHandler(this.emptyPrtg);
             // 
             // button4
             // 
@@ -63,7 +63,7 @@
             this.button4.TabIndex = 34;
             this.button4.Text = "Selecteer";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.select_file);
+            this.button4.Click += new System.EventHandler(this.selectFile);
             // 
             // label3
             // 
@@ -85,7 +85,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(407, 140);
+            this.ClientSize = new System.Drawing.Size(393, 140);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.iPath);
@@ -93,7 +93,6 @@
             this.Controls.Add(this.button1);
             this.Name = "prtg";
             this.Text = "RPTG";
-            this.Load += new System.EventHandler(this.RPTG_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

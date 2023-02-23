@@ -48,23 +48,23 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(175, 144);
+            this.button1.Location = new System.Drawing.Point(41, 173);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(102, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "Uploaden";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.excel_uploaden_to_database);
+            this.button1.Click += new System.EventHandler(this.excelUploadentToDatabase);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(41, 191);
+            this.button2.Location = new System.Drawing.Point(41, 202);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(132, 23);
             this.button2.TabIndex = 1;
             this.button2.Text = "TRUNCATE TABLE data";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.empty_data);
+            this.button2.Click += new System.EventHandler(this.emptyData);
             // 
             // x
             // 
@@ -131,7 +131,7 @@
             this.button4.TabIndex = 12;
             this.button4.Text = "Selecteer";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.select_file);
+            this.button4.Click += new System.EventHandler(this.selectFile);
             // 
             // servicedesk
             // 

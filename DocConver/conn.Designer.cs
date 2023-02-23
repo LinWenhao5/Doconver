@@ -42,7 +42,7 @@
             this.button7.TabIndex = 33;
             this.button7.Text = "Create SQL table";
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button7.Click += new System.EventHandler(this.createTable);
             // 
             // button6
             // 

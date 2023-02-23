@@ -25,8 +25,7 @@ namespace DocConver
             InitializeComponent();
         }
 
-
-        private void excel_uploaden_to_database(object sender, EventArgs e)
+        private void excelUploadentToDatabase(object sender, EventArgs e)
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook workbook = excelApp.Workbooks.Open(iPath.Text);
@@ -49,22 +48,22 @@ namespace DocConver
                             using (SqlCommand command = new SqlCommand(query, connection))
                             {
                                 string col_one = range.Cells[row, x.Value].value2;
-                                string col_two = range.Cells[row, x.Value+1].value2;
-                                string col_three = range.Cells[row, x.Value+2].value2;
-                                string col_four = range.Cells[row, x.Value+3].value2;
+                                string col_two = range.Cells[row, x.Value + 1].value2;
+                                string col_three = range.Cells[row, x.Value + 2].value2;
+                                string col_four = range.Cells[row, x.Value + 3].value2;
                                 DateTime col_five = DateTime.Parse(range.Cells[row, x.Value + 4].value2);
                                 DateTime col_six = DateTime.MaxValue;
                                 if (range.Cells[row, x.Value + 5].value2 != null)
                                 {
                                     col_six = DateTime.Parse(range.Cells[row, x.Value + 5].value2);
                                 }
-                                string col_seven = range.Cells[row, x.Value+6].value2;
-                                string col_eight = range.Cells[row, x.Value+7].value2;
-                                string col_nine = range.Cells[row, x.Value+8].value2;
-                                string col_ten = range.Cells[row, x.Value+9].value2;
-                                string col_eleven = range.Cells[row, x.Value+10].value2;
-                                string col_twelve = range.Cells[row, x.Value+11].value2;
-                                string col_thirteen = range.Cells[row, x.Value+12].value2;
+                                string col_seven = range.Cells[row, x.Value + 6].value2;
+                                string col_eight = range.Cells[row, x.Value + 7].value2;
+                                string col_nine = range.Cells[row, x.Value + 8].value2;
+                                string col_ten = range.Cells[row, x.Value + 9].value2;
+                                string col_eleven = range.Cells[row, x.Value + 10].value2;
+                                string col_twelve = range.Cells[row, x.Value + 11].value2;
+                                string col_thirteen = range.Cells[row, x.Value + 12].value2;
 
                                 command.Parameters.AddWithValue("@bedrijf", "" + col_one + "");
                                 command.Parameters.AddWithValue("@title", "" + col_two + "");
@@ -85,14 +84,14 @@ namespace DocConver
 
                     }
                 }
-               connection.Close();
+                connection.Close();
             }
-            workbook.Close(); 
+            workbook.Close();
             excelApp.Quit();
             MessageBox.Show("data has been send");
         }
 
-        private void empty_data(object sender, EventArgs e)
+        private void emptyData(object sender, EventArgs e)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -105,8 +104,8 @@ namespace DocConver
             MessageBox.Show("data has been cleared");
         }
 
-      
-        private void select_file(object sender, EventArgs e)
+
+        private void selectFile(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "select file";

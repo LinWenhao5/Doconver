@@ -26,12 +26,7 @@ namespace DocConver
             InitializeComponent();
         }
 
-        private void RPTG_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void read_data(object sender, EventArgs e)
+        private void readData(object sender, EventArgs e)
         {
             string file = iPath.Text;
             PdfReader pdfRead = new PdfReader(file);
@@ -43,6 +38,7 @@ namespace DocConver
                 {
                     ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
                     string input = PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(page), strategy);
+                    Debug.WriteLine(input);
                     string pattern = @"Probe, Groep, Apparaat:(?<apparaat>.*)\nBeschikbaarheid Stats: (?<status>\w+): (?<percentage>\d*)";
                     Match match = Regex.Match(input, pattern);
                     if (match.Success)
@@ -62,7 +58,7 @@ namespace DocConver
             MessageBox.Show("data has been stored in dbo.ptrg");
         }
 
-        private void empty_prtg(object sender, EventArgs e)
+        private void emptyPrtg(object sender, EventArgs e)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -75,7 +71,7 @@ namespace DocConver
             MessageBox.Show("data has been cleared");
         }
 
-        private void select_file(object sender, EventArgs e)
+        private void selectFile(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "select file";

@@ -23,26 +23,26 @@ namespace DocConver
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void openServicedesk(object sender, EventArgs e)
         {
             servicedesk = new servicedesk();
             servicedesk.Show();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void openPrtg(object sender, EventArgs e)
         {
             prtg = new prtg();
             prtg.Show();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void openConn(object sender, EventArgs e)
         {
             conn = new conn();
             conn.Show();
         }
 
 
-        private void button4_Click(object sender, EventArgs e)
+        private void testConnection(object sender, EventArgs e)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
