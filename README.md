@@ -32,6 +32,7 @@ Hulpmiddelen voor het lezen van bestandsgegevens
 ![menu](https://i.ibb.co/Mndg6d4/Schermafbeelding-2023-02-23-113159.png)
 
 5. Klik op de `connection`
+
 ![connection](https://i.ibb.co/NpYhPvX/Schermafbeelding-2023-02-23-121246.png)
 
 6. Voer de `connection String` in en klik op `Save`
