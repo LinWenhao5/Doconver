@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Configuration;
 
+//iText is een dependcy die inhoud van pdf kunt lezen
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
@@ -26,7 +27,7 @@ namespace DocConver
             InitializeComponent();
         }
 
-        private void readData(object sender, EventArgs e)
+        private void readData(object sender, EventArgs e) //get belangrijke data van pdf en opslaan in dbo prtg
         {
             string file = iPath.Text;
             PdfReader pdfRead = new PdfReader(file);
@@ -34,11 +35,12 @@ namespace DocConver
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                for (int page = 1; page <= pdfDoc.GetNumberOfPages(); page++)
+                for (int page = 1; page <= pdfDoc.GetNumberOfPages(); page++) //pdf wordt per pagina gelezen
                 {
                     ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+                    //input bevat de inhoud van deze pagina
                     string input = PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(page), strategy);
-                    Debug.WriteLine(input);
+                    // regex worden hier gebruiken om belangrijke informatie uit de teskt halen
                     string pattern = @"Probe, Groep, Apparaat:(?<apparaat>.*)\nBeschikbaarheid Stats: (?<status>\w+): (?<percentage>\d*)";
                     Match match = Regex.Match(input, pattern);
                     if (match.Success)
@@ -46,6 +48,7 @@ namespace DocConver
                         String qeury = "INSERT INTO prtg (Apparaat, [Beschikbaarheid Stats], Percentage) VALUES (@value1, @value2, @value3)";
                         using (SqlCommand command = new SqlCommand(qeury, connection))
                         {
+                            //hier voeg de opgehaalde Group toe aan de query
                             command.Parameters.AddWithValue("@value1", match.Groups["apparaat"].Value);
                             command.Parameters.AddWithValue("@value2", match.Groups["status"].Value);
                             command.Parameters.AddWithValue("@value3", match.Groups["percentage"].Value);

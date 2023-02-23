@@ -8,9 +8,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+//execel dependency
+//verantwoordelijk voor het lezen en schrijven van Excel-bestand
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Data.SqlClient;
 using Microsoft.Office.Interop.Excel;
+
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Configuration;
@@ -25,7 +29,7 @@ namespace DocConver
             InitializeComponent();
         }
 
-        private void excelUploadentToDatabase(object sender, EventArgs e)
+        private void excelUploadentToDatabase(object sender, EventArgs e) //het uploaden van excel gegenes naar dbo.helpdesk
         {
             Excel.Application excelApp = new Excel.Application();
             Excel.Workbook workbook = excelApp.Workbooks.Open(iPath.Text);
@@ -36,17 +40,21 @@ namespace DocConver
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
+
                 for (int row = 1; row <= range.Rows.Count; row++)
                 {
                     for (int col = 1; col <= range.Columns.Count; col++)
                     {
-                        if (row >= y.Value && col == range.Columns.Count)
+                        //Sommige waarde in het excelblad zijn niet wat we willen
+                        //dus die moet uitsluiten in de for-loop
+                        if (row >= y.Value && col == range.Columns.Count) // y.Value is het aantal rijen dat ik wil weglaten.
                         {
                             String query = "INSERT INTO helpDesk (Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
                                 "VALUES(@bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
 
                             using (SqlCommand command = new SqlCommand(query, connection))
                             {
+                                //x.Value is het aantal kolom dat ik wil weglaten.
                                 string col_one = range.Cells[row, x.Value].value2;
                                 string col_two = range.Cells[row, x.Value + 1].value2;
                                 string col_three = range.Cells[row, x.Value + 2].value2;
@@ -91,7 +99,7 @@ namespace DocConver
             MessageBox.Show("data has been send");
         }
 
-        private void emptyData(object sender, EventArgs e)
+        private void emptyData(object sender, EventArgs e) //verwijder de data van dbo.helpDesk
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
@@ -105,7 +113,7 @@ namespace DocConver
         }
 
 
-        private void selectFile(object sender, EventArgs e)
+        private void selectFile(object sender, EventArgs e) //Krijg de link van het excel bestand
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "select file";

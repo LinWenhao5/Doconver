@@ -23,6 +23,7 @@ namespace DocConver
             InitializeComponent();
         }
 
+        // dit zijn vier knoppen van het menu
         private void openServicedesk(object sender, EventArgs e)
         {
             servicedesk = new servicedesk();
