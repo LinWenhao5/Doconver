@@ -18,6 +18,7 @@ using Microsoft.Office.Interop.Excel;
 using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Configuration;
+using iText.Layout.Font;
 
 namespace DocConver
 {
@@ -49,43 +50,55 @@ namespace DocConver
                         //dus die moet uitsluiten in de for-loop
                         if (row >= y.Value && col == range.Columns.Count) // y.Value is het aantal rijen dat ik wil weglaten.
                         {
-                            String query = "INSERT INTO helpDesk (Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
-                                "VALUES(@bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
+                            String query = "INSERT INTO helpDesk (#, Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
+                                "VALUES(@#, @bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
 
                             using (SqlCommand command = new SqlCommand(query, connection))
                             {
                                 //x.Value is het aantal kolom dat ik wil weglaten.
-                                string col_one = range.Cells[row, x.Value].value2;
-                                string col_two = range.Cells[row, x.Value + 1].value2;
-                                string col_three = range.Cells[row, x.Value + 2].value2;
-                                string col_four = range.Cells[row, x.Value + 3].value2;
-                                DateTime col_five = DateTime.Parse(range.Cells[row, x.Value + 4].value2);
-                                DateTime col_six = DateTime.MaxValue;
-                                if (range.Cells[row, x.Value + 5].value2 != null)
+                                string[] value = new string[14];
+                                DateTime? tijd_ind = null;
+                                DateTime? tijd_slu = null;
+                                for (int i = 0; i <= 13; i++)
                                 {
-                                    col_six = DateTime.Parse(range.Cells[row, x.Value + 5].value2);
+                                    if (i == 4)
+                                    {
+                                        value[i] = range.Cells[row, x.Value + i].value2;
+                                        if (value[i] != null)
+                                        {
+                                            tijd_ind = DateTime.Parse(value[i]);
+                                        }
+                                    } else if (i == 5) {
+                                        value[i] = range.Cells[row, x.Value + i].value2;
+                                        if (value[i] != null)
+                                        {
+                                            tijd_slu = DateTime.Parse(value[i]);
+                                        }
+                                    } else
+                                    {
+                                        value[i] = range.Cells[row, x.Value + i].value2;
+                                    }
                                 }
-                                string col_seven = range.Cells[row, x.Value + 6].value2;
-                                string col_eight = range.Cells[row, x.Value + 7].value2;
-                                string col_nine = range.Cells[row, x.Value + 8].value2;
-                                string col_ten = range.Cells[row, x.Value + 9].value2;
-                                string col_eleven = range.Cells[row, x.Value + 10].value2;
-                                string col_twelve = range.Cells[row, x.Value + 11].value2;
-                                string col_thirteen = range.Cells[row, x.Value + 12].value2;
-
-                                command.Parameters.AddWithValue("@bedrijf", "" + col_one + "");
-                                command.Parameters.AddWithValue("@title", "" + col_two + "");
-                                command.Parameters.AddWithValue("@naam", "" + col_three + "");
-                                command.Parameters.AddWithValue("@urgentie", "" + col_four + "");
-                                command.Parameters.AddWithValue("@tijd_ind_verzoek", col_five);
-                                command.Parameters.AddWithValue("@tijd_sluiting", col_six);
-                                command.Parameters.AddWithValue("@status", "" + col_seven + "");
-                                command.Parameters.AddWithValue("@cate", "" + col_eight + "");
-                                command.Parameters.AddWithValue("@subcate", "" + col_nine + "");
-                                command.Parameters.AddWithValue("@tpye_service", "" + col_ten + "");
-                                command.Parameters.AddWithValue("@time_to_resp", "" + col_eleven + "");
-                                command.Parameters.AddWithValue("@time_to_repair", "" + col_twelve + "");
-                                command.Parameters.AddWithValue("@total_act_time", "" + col_thirteen + "");
+                                command.Parameters.AddWithValue("@#", range.Cells[row, 1].value2);
+                                command.Parameters.AddWithValue("@bedrijf", ""+ value[0] + "");
+                                command.Parameters.AddWithValue("@title", "" + value[1] + "");
+                                command.Parameters.AddWithValue("@naam", "" + value[2] + "");
+                                command.Parameters.AddWithValue("@urgentie", "" + value[3] + "");
+                                command.Parameters.AddWithValue("@tijd_ind_verzoek", tijd_ind);
+                                if (tijd_slu == null)
+                                {
+                                    command.Parameters.AddWithValue("@tijd_sluiting", DBNull.Value);
+                                } else
+                                {
+                                    command.Parameters.AddWithValue("@tijd_sluiting", tijd_slu);
+                                }   
+                                command.Parameters.AddWithValue("@status", "" + value[6] + "");
+                                command.Parameters.AddWithValue("@cate", "" + value[7] + "");
+                                command.Parameters.AddWithValue("@subcate", "" + value[8] + "");
+                                command.Parameters.AddWithValue("@tpye_service", "" + value[9] + "");
+                                command.Parameters.AddWithValue("@time_to_resp", "" + value[10] + "");
+                                command.Parameters.AddWithValue("@time_to_repair", "" + value[11] + "");
+                                command.Parameters.AddWithValue("@total_act_time", "" + value[12] + "");
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -121,6 +134,22 @@ namespace DocConver
             openFileDialog.Multiselect = false;
             openFileDialog.ShowDialog();
             iPath.Text = openFileDialog.FileName;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                String QueryDrop = "DROP VIEW IF EXISTS dbo.help_desk_per_klant;";
+                String QueryCreate = "CREATE VIEW [help_desk_per_klant] AS SELECT * FROM helpDesk WHERE CONVERT(VARCHAR, Bedrijf) = '" + bedrijf.Text+"'";
+                SqlCommand cmdDrop = new SqlCommand(QueryDrop, connection);
+                SqlCommand cmdCreate = new SqlCommand(QueryCreate, connection);
+                cmdDrop.ExecuteNonQuery();
+                cmdCreate.ExecuteNonQuery();
+                connection.Close();
+                MessageBox.Show("view has been create");
+            }
         }
     }
 }

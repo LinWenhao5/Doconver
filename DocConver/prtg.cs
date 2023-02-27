@@ -16,6 +16,7 @@ using System.Configuration;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
+using System.Security.Policy;
 
 namespace DocConver
 {
@@ -40,25 +41,29 @@ namespace DocConver
                     ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
                     //input bevat de inhoud van deze pagina
                     string input = PdfTextExtractor.GetTextFromPage(pdfDoc.GetPage(page), strategy);
+                    Debug.WriteLine(input);
                     // regex worden hier gebruiken om belangrijke informatie uit de teskt halen
-                    string pattern = @"Probe, Groep, Apparaat:(?<apparaat>.*)\nBeschikbaarheid Stats: (?<status>\w+): (?<percentage>\d*)";
-                    Match match = Regex.Match(input, pattern);
-                    if (match.Success)
+                    string pattern = @"De Periode van het rapport: (?<date>\d+\/\d+\/\d+)|Probe, Groep, Apparaat:(?<Component>.*)|Beschikbaarheid Stats: (?<status>\w+): (?<value>\d+\.\d+|\d+|)";
+                    MatchCollection matches = Regex.Matches(input, pattern);
+                    if (matches.Count == 3)
                     {
-                        String qeury = "INSERT INTO prtg (Apparaat, [Beschikbaarheid Stats], Percentage) VALUES (@value1, @value2, @value3)";
+                        String qeury = "INSERT INTO prtg (Apparaat, [Beschikbaarheid Stats], Percentage, Datum) VALUES (@value1, @value2, @value3, @value4)";
                         using (SqlCommand command = new SqlCommand(qeury, connection))
                         {
                             //hier voeg de opgehaalde Group toe aan de query
-                            command.Parameters.AddWithValue("@value1", match.Groups["apparaat"].Value);
-                            command.Parameters.AddWithValue("@value2", match.Groups["status"].Value);
-                            command.Parameters.AddWithValue("@value3", match.Groups["percentage"].Value);
+                            command.Parameters.AddWithValue("@value1", matches[1].Groups["Component"].Value);
+                            command.Parameters.AddWithValue("@value2", matches[2].Groups["status"].Value);
+                            command.Parameters.AddWithValue("@value3", matches[2].Groups["value"].Value);
+                            command.Parameters.AddWithValue("@value4", DateTime.Parse(matches[0].Groups["date"].Value));
+
                             command.ExecuteNonQuery();
                         }
                     }
+                    
                 }
                 connection.Close();
+                MessageBox.Show("data has been save");
             }
-            MessageBox.Show("data has been stored in dbo.ptrg");
         }
 
         private void emptyPrtg(object sender, EventArgs e)
