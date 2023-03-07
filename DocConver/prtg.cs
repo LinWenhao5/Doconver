@@ -17,6 +17,7 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
 using System.Security.Policy;
+using System.Threading;
 
 namespace DocConver
 {
@@ -30,7 +31,35 @@ namespace DocConver
 
         private void readData(object sender, EventArgs e) //get belangrijke data van pdf en opslaan in dbo prtg
         {
-            string file = iPath.Text;
+            Thread readPdf = new Thread(() => prtg.threadReadPdf(connectionString, iPath.Text));
+            readPdf.Start();
+        }
+
+        private void emptyPrtg(object sender, EventArgs e)
+        {
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+
+            String Query = "TRUNCATE TABLE prtg";
+            SqlCommand cmd = new SqlCommand(Query, conn);
+            cmd.ExecuteNonQuery();
+
+            conn.Close();
+            MessageBox.Show("data has been cleared");
+        }
+
+        private void selectFile(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "select file";
+            openFileDialog.Filter = "pdf|*.pdf";
+            openFileDialog.Multiselect = false;
+            openFileDialog.ShowDialog();
+            iPath.Text = openFileDialog.FileName;
+        }
+
+        public static void threadReadPdf(string connectionString, string file)
+        {
             PdfReader pdfRead = new PdfReader(file);
             PdfDocument pdfDoc = new PdfDocument(pdfRead);
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -59,34 +88,11 @@ namespace DocConver
                             command.ExecuteNonQuery();
                         }
                     }
-                    
+
                 }
                 connection.Close();
                 MessageBox.Show("data has been save");
             }
-        }
-
-        private void emptyPrtg(object sender, EventArgs e)
-        {
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
-
-            String Query = "TRUNCATE TABLE prtg";
-            SqlCommand cmd = new SqlCommand(Query, conn);
-            cmd.ExecuteNonQuery();
-
-            conn.Close();
-            MessageBox.Show("data has been cleared");
-        }
-
-        private void selectFile(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "select file";
-            openFileDialog.Filter = "pdf|*.pdf";
-            openFileDialog.Multiselect = false;
-            openFileDialog.ShowDialog();
-            iPath.Text = openFileDialog.FileName;
         }
     }
 }
