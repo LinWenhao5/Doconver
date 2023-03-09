@@ -29,6 +29,18 @@ namespace DocConver
         public servicedesk()
         {
             InitializeComponent();
+            SqlConnection connection = new SqlConnection(connectionString);
+            connection.Open();
+            string sql = "SELECT DISTINCT Bedrijf FROM helpDesk";
+            SqlCommand cmd = new SqlCommand(sql, connection);
+            SqlDataReader dr = cmd.ExecuteReader();
+            while (dr.Read())
+            {
+                bedrijfNaam.Items.Add(dr["Bedrijf"]);
+            }
+
+            dr.Close();
+            connection.Close();
         }
 
         private void excelUploadentToDatabase(object sender, EventArgs e) //het uploaden van excel gegenes naar dbo.helpdesk
@@ -69,14 +81,21 @@ namespace DocConver
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                String QueryDrop = "DROP VIEW IF EXISTS dbo.help_desk_per_klant;";
-                String QueryCreate = "CREATE VIEW [help_desk_per_klant] AS SELECT * FROM helpDesk WHERE CONVERT(VARCHAR, Bedrijf) = '" + bedrijf.Text+"'";
-                SqlCommand cmdDrop = new SqlCommand(QueryDrop, connection);
-                SqlCommand cmdCreate = new SqlCommand(QueryCreate, connection);
-                cmdDrop.ExecuteNonQuery();
-                cmdCreate.ExecuteNonQuery();
+                string[] Querys = {
+                    "DROP VIEW IF EXISTS dbo.help_desk_per_klant",
+                    "DROP VIEW IF EXISTS dbo.samenvatting_per_rapport",
+                    "INSERT INTO Samenvatting (bedrijf, samenvatting) VALUES ('" + bedrijfNaam.SelectedItem.ToString() + "', '" + Samenvatting.Text + "')",
+                    "CREATE VIEW [help_desk_per_klant] AS SELECT * FROM helpDesk WHERE Bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "'",
+                    "CREATE VIEW [samenvatting_per_rapport] AS SELECT TOP 1 samenvatting FROM Samenvatting  WHERE bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "' ORDER BY time DESC"
+                };
+
+                for (int i = 0; i < Querys.Length; i++)
+                {
+                    SqlCommand cmd = new SqlCommand(Querys[i], connection);
+                    cmd.ExecuteNonQuery();
+                }
                 connection.Close();
-                MessageBox.Show("view has been create");
+                MessageBox.Show(bedrijfNaam.SelectedItem.ToString() + " has been create");
             }
         }
 
@@ -164,5 +183,6 @@ namespace DocConver
                 MessageBox.Show("data has been send");
             }
         }
+
     }
 }

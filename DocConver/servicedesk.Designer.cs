@@ -41,9 +41,11 @@
             this.iPath = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.bedrijf = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button3 = new System.Windows.Forms.Button();
+            this.bedrijfNaam = new System.Windows.Forms.ListBox();
+            this.Samenvatting = new System.Windows.Forms.RichTextBox();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.x)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.y)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
@@ -61,7 +63,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(40, 325);
+            this.button2.Location = new System.Drawing.Point(41, 243);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(132, 23);
             this.button2.TabIndex = 1;
@@ -136,17 +138,10 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.selectFile);
             // 
-            // bedrijf
-            // 
-            this.bedrijf.Location = new System.Drawing.Point(40, 243);
-            this.bedrijf.Name = "bedrijf";
-            this.bedrijf.Size = new System.Drawing.Size(133, 20);
-            this.bedrijf.TabIndex = 22;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(38, 227);
+            this.label1.Location = new System.Drawing.Point(569, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 23;
@@ -154,7 +149,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(41, 269);
+            this.button3.Location = new System.Drawing.Point(413, 214);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(102, 23);
             this.button3.TabIndex = 24;
@@ -162,14 +157,41 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // bedrijfNaam
+            // 
+            this.bedrijfNaam.FormattingEnabled = true;
+            this.bedrijfNaam.Location = new System.Drawing.Point(572, 51);
+            this.bedrijfNaam.Name = "bedrijfNaam";
+            this.bedrijfNaam.Size = new System.Drawing.Size(120, 186);
+            this.bedrijfNaam.TabIndex = 25;
+            // 
+            // Samenvatting
+            // 
+            this.Samenvatting.Location = new System.Drawing.Point(362, 106);
+            this.Samenvatting.Name = "Samenvatting";
+            this.Samenvatting.Size = new System.Drawing.Size(195, 90);
+            this.Samenvatting.TabIndex = 26;
+            this.Samenvatting.Text = "";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(423, 77);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(72, 13);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Samenvatting";
+            // 
             // servicedesk
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(444, 372);
+            this.ClientSize = new System.Drawing.Size(704, 296);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.Samenvatting);
+            this.Controls.Add(this.bedrijfNaam);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.bedrijf);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
@@ -181,7 +203,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "servicedesk";
-            this.Text = "Doconvert";
+            this.Text = "s";
             ((System.ComponentModel.ISupportInitialize)(this.x)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.y)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
@@ -204,9 +226,11 @@
         private System.Windows.Forms.TextBox iPath;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.TextBox bedrijf;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ListBox bedrijfNaam;
+        private System.Windows.Forms.RichTextBox Samenvatting;
+        private System.Windows.Forms.Label label2;
     }
 }
 
