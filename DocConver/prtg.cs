@@ -24,9 +24,12 @@ namespace DocConver
     public partial class prtg : Form
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["localhost"].ConnectionString;
+        private SqlConnection connection;
+
         public prtg()
         {
             InitializeComponent();
+            connection = new SqlConnection(connectionString);
         }
 
         private void readData(object sender, EventArgs e) //get belangrijke data van pdf en opslaan in dbo prtg
@@ -37,14 +40,13 @@ namespace DocConver
 
         private void emptyPrtg(object sender, EventArgs e)
         {
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
+            connection.Open();
 
             String Query = "TRUNCATE TABLE prtg";
-            SqlCommand cmd = new SqlCommand(Query, conn);
+            SqlCommand cmd = new SqlCommand(Query, connection);
             cmd.ExecuteNonQuery();
 
-            conn.Close();
+            connection.Close();
             MessageBox.Show("data has been cleared");
         }
 

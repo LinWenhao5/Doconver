@@ -20,16 +20,19 @@ using System.IO;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Configuration;
 using iText.Layout.Font;
+using iText.Kernel.Geom;
 
 namespace DocConver
 {
     public partial class servicedesk : Form
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["localhost"].ConnectionString;
+        private SqlConnection connection;
+
         public servicedesk()
         {
             InitializeComponent();
-            SqlConnection connection = new SqlConnection(connectionString);
+            connection = new SqlConnection(connectionString);
             connection.Open();
             string sql = "SELECT DISTINCT Bedrijf FROM helpDesk";
             SqlCommand cmd = new SqlCommand(sql, connection);
@@ -54,14 +57,13 @@ namespace DocConver
 
         private void emptyData(object sender, EventArgs e) //verwijder de data van dbo.helpDesk
         {
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
+            connection.Open();
 
             String Query = "TRUNCATE TABLE helpDesk";
-            SqlCommand cmd = new SqlCommand(Query, conn);
+            SqlCommand cmd = new SqlCommand(Query,connection);
             cmd.ExecuteNonQuery();
 
-            conn.Close();
+            connection.Close();
             MessageBox.Show("data has been cleared");
         }
 
@@ -76,27 +78,24 @@ namespace DocConver
             iPath.Text = openFileDialog.FileName;
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void creatView(object sender, EventArgs e)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string[] Querys = {
-                    "DROP VIEW IF EXISTS dbo.help_desk_per_klant",
-                    "DROP VIEW IF EXISTS dbo.samenvatting_per_rapport",
-                    "INSERT INTO Samenvatting (bedrijf, samenvatting) VALUES ('" + bedrijfNaam.SelectedItem.ToString() + "', '" + Samenvatting.Text + "')",
-                    "CREATE VIEW [help_desk_per_klant] AS SELECT * FROM helpDesk WHERE Bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "'",
-                    "CREATE VIEW [samenvatting_per_rapport] AS SELECT TOP 1 samenvatting FROM Samenvatting  WHERE bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "' ORDER BY time DESC"
-                };
+            connection.Open();
+            string[] Querys = {
+                "DROP VIEW IF EXISTS dbo.help_desk_per_klant",
+                "DROP VIEW IF EXISTS dbo.samenvatting_per_rapport",
+                "INSERT INTO samenvatting (bedrijf, samenvatting) VALUES ('" + bedrijfNaam.SelectedItem.ToString() + "', '" + Samenvatting.Text + "')",
+                "CREATE VIEW [help_desk_per_klant] AS SELECT * FROM helpDesk WHERE Bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "'",
+                "CREATE VIEW [samenvatting_per_rapport] AS SELECT TOP 1 samenvatting FROM Samenvatting  WHERE bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "' ORDER BY time DESC"
+            };
 
-                for (int i = 0; i < Querys.Length; i++)
-                {
-                    SqlCommand cmd = new SqlCommand(Querys[i], connection);
-                    cmd.ExecuteNonQuery();
-                }
-                connection.Close();
-                MessageBox.Show(bedrijfNaam.SelectedItem.ToString() + " has been create");
+            for (int i = 0; i < Querys.Length; i++)
+            {
+                SqlCommand cmd = new SqlCommand(Querys[i], connection);
+                cmd.ExecuteNonQuery();
             }
+            connection.Close();
+            MessageBox.Show(bedrijfNaam.SelectedItem.ToString() + " has been create");
         }
 
         public static void uploaden(string connectionString, string path, int x, int y)
