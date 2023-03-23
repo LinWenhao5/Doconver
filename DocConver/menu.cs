@@ -45,18 +45,19 @@ namespace DocConver
 
         private void testConnection(object sender, EventArgs e)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                try
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
+                    connection.Open();
                     MessageBox.Show("connection successful");
-                    connection.Close();
                 }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show(ex.Message.ToString());
-                }
+            } 
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
+
     }
 }

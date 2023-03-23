@@ -27,44 +27,64 @@ namespace DocConver
     public partial class servicedesk : Form
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["localhost"].ConnectionString;
-        private SqlConnection connection;
 
         public servicedesk()
         {
-            InitializeComponent();
-            connection = new SqlConnection(connectionString);
-            connection.Open();
-            string sql = "SELECT DISTINCT Bedrijf FROM helpDesk";
-            SqlCommand cmd = new SqlCommand(sql, connection);
-            SqlDataReader dr = cmd.ExecuteReader();
-            while (dr.Read())
+            try
             {
-                bedrijfNaam.Items.Add(dr["Bedrijf"]);
-            }
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    InitializeComponent();
+                    connection.Open();
+                    string sql = "SELECT DISTINCT Bedrijf FROM helpDesk";
+                    SqlCommand cmd = new SqlCommand(sql, connection);
+                    SqlDataReader dr = cmd.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        bedrijfNaam.Items.Add(dr["Bedrijf"]);
+                    }
 
-            dr.Close();
-            connection.Close();
+                    dr.Close();
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void excelUploadentToDatabase(object sender, EventArgs e) //het uploaden van excel gegenes naar dbo.helpdesk
         {
-
-            Thread uploaden = new Thread(() => servicedesk.uploaden(connectionString, iPath.Text, (int)x.Value, (int)y.Value));
-            uploaden.Start();
-            MessageBox.Show("Het uploaden van de gegevens is beginnen...");
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                   Thread uploaden = new Thread(() => servicedesk.uploaden(connectionString, iPath.Text, (int)x.Value, (int)y.Value));
+                   uploaden.Start();
+                   MessageBox.Show("Het uploaden van de gegevens is beginnen...");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
 
         private void emptyData(object sender, EventArgs e) //verwijder de data van dbo.helpDesk
         {
-            connection.Open();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
 
-            String Query = "TRUNCATE TABLE helpDesk";
-            SqlCommand cmd = new SqlCommand(Query,connection);
-            cmd.ExecuteNonQuery();
+                String Query = "TRUNCATE TABLE helpDesk";
+                SqlCommand cmd = new SqlCommand(Query, connection);
+                cmd.ExecuteNonQuery();
 
-            connection.Close();
-            MessageBox.Show("data has been cleared");
+                connection.Close();
+                MessageBox.Show("data has been cleared");
+            }
         }
 
 
@@ -80,22 +100,29 @@ namespace DocConver
 
         private void creatView(object sender, EventArgs e)
         {
-            connection.Open();
-            string[] Querys = {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+                string[] Querys = {
                 "DROP VIEW IF EXISTS dbo.help_desk_per_klant",
                 "DROP VIEW IF EXISTS dbo.samenvatting_per_rapport",
                 "INSERT INTO samenvatting (bedrijf, samenvatting) VALUES ('" + bedrijfNaam.SelectedItem.ToString() + "', '" + Samenvatting.Text + "')",
                 "CREATE VIEW [help_desk_per_klant] AS SELECT * FROM helpDesk WHERE Bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "'",
                 "CREATE VIEW [samenvatting_per_rapport] AS SELECT TOP 1 samenvatting FROM Samenvatting  WHERE bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "' ORDER BY time DESC"
-            };
+                };
 
-            for (int i = 0; i < Querys.Length; i++)
-            {
-                SqlCommand cmd = new SqlCommand(Querys[i], connection);
-                cmd.ExecuteNonQuery();
+                for (int i = 0; i < Querys.Length; i++)
+                {
+                    if (i == 2 && String.IsNullOrEmpty(Samenvatting.Text))
+                    {
+                        i++;
+                    }
+                    SqlCommand cmd = new SqlCommand(Querys[i], connection);
+                    cmd.ExecuteNonQuery();
+                }
+                connection.Close();
+                MessageBox.Show(bedrijfNaam.SelectedItem.ToString() + " has been create");
             }
-            connection.Close();
-            MessageBox.Show(bedrijfNaam.SelectedItem.ToString() + " has been create");
         }
 
         public static void uploaden(string connectionString, string path, int x, int y)
@@ -182,6 +209,5 @@ namespace DocConver
                 MessageBox.Show("data has been send");
             }
         }
-
     }
 }

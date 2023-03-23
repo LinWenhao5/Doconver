@@ -22,7 +22,10 @@ namespace DocConver
         public conn()
         {
             InitializeComponent();
-            connection= new SqlConnection(connectionString);
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connection = new SqlConnection(connectionString);
+            }
         }
 
         private void save(object sender, EventArgs e) //Connection String opslaan in app.config
