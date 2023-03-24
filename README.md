@@ -10,10 +10,6 @@ Hulpmiddelen voor het lezen van bestandsgegevens
 ## Screenshots
 ![menu](https://i.ibb.co/Mndg6d4/Schermafbeelding-2023-02-23-113159.png)
 
-## Exe file
-
-[Google Drive](https://drive.google.com/drive/folders/1-GxmMY94aNZfXRuJjl23Hr_7EV3ZB-2B?usp=sharing)
-
 ## How to use？
 
 1. Download [setup1.msi](https://github.com/LinWenhao5/Doconver/releases/tag/doconver)
