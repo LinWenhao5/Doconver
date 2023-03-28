@@ -36,16 +36,6 @@ namespace DocConver
                 {
                     InitializeComponent();
                     connection.Open();
-                    string sql = "SELECT DISTINCT Bedrijf FROM helpDesk";
-                    SqlCommand cmd = new SqlCommand(sql, connection);
-                    SqlDataReader dr = cmd.ExecuteReader();
-                    while (dr.Read())
-                    {
-                        bedrijfNaam.Items.Add(dr["Bedrijf"]);
-                    }
-
-                    dr.Close();
-                    connection.Close();
                 }
             }
             catch (Exception ex)
@@ -60,7 +50,7 @@ namespace DocConver
             {
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                   Thread uploaden = new Thread(() => servicedesk.uploaden(connectionString, iPath.Text, (int)x.Value, (int)y.Value));
+                   Thread uploaden = new Thread(() => servicedesk.uploaden(connectionString, iPath.Text, 3, 4));
                    uploaden.Start();
                    MessageBox.Show("Het uploaden van de gegevens is beginnen...");
                 }
@@ -90,39 +80,14 @@ namespace DocConver
 
         private void selectFile(object sender, EventArgs e) //Krijg de link van het excel bestand
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Title = "select file";
-            openFileDialog.Filter = "excel|*.xlsx";
-            openFileDialog.Multiselect = false;
-            openFileDialog.ShowDialog();
-            iPath.Text = openFileDialog.FileName;
-        }
-
-        private void creatView(object sender, EventArgs e)
-        {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                connection.Open();
-                string[] Querys = {
-                "DROP VIEW IF EXISTS dbo.help_desk_per_klant",
-                "DROP VIEW IF EXISTS dbo.samenvatting_per_rapport",
-                "INSERT INTO samenvatting (bedrijf, samenvatting) VALUES ('" + bedrijfNaam.SelectedItem.ToString() + "', '" + Samenvatting.Text + "')",
-                "CREATE VIEW [help_desk_per_klant] AS SELECT * FROM helpDesk WHERE Bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "'",
-                "CREATE VIEW [samenvatting_per_rapport] AS SELECT TOP 1 samenvatting FROM Samenvatting  WHERE bedrijf = '" + bedrijfNaam.SelectedItem.ToString() + "' ORDER BY time DESC"
-                };
-
-                for (int i = 0; i < Querys.Length; i++)
-                {
-                    if (i == 2 && String.IsNullOrEmpty(Samenvatting.Text))
-                    {
-                        i++;
-                    }
-                    SqlCommand cmd = new SqlCommand(Querys[i], connection);
-                    cmd.ExecuteNonQuery();
-                }
-                connection.Close();
-                MessageBox.Show(bedrijfNaam.SelectedItem.ToString() + " has been create");
-            }
+                openFileDialog.Title = "select file";
+                openFileDialog.Filter = "excel|*.xlsx";
+                openFileDialog.Multiselect = false;
+                openFileDialog.ShowDialog();
+                iPath.Text = openFileDialog.FileName;
+            }   
         }
 
         public static void uploaden(string connectionString, string path, int x, int y)
@@ -209,5 +174,6 @@ namespace DocConver
                 MessageBox.Show("data has been send");
             }
         }
+
     }
 }

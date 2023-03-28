@@ -172,7 +172,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="example.cs" />
     <Compile Include="conn.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocConver", "DocConver\DocConver.csproj", "{D3E2BD07-4385-485A-A48E-59D5CCE4D524}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup1", "Setup1\Setup1.vdproj", "{4456B48F-96BC-49D5-853E-95281979AA5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{D3E2BD07-4385-485A-A48E-59D5CCE4D524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3E2BD07-4385-485A-A48E-59D5CCE4D524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3E2BD07-4385-485A-A48E-59D5CCE4D524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4456B48F-96BC-49D5-853E-95281979AA5A}.Debug|Any CPU.ActiveCfg = Debug
+		{4456B48F-96BC-49D5-853E-95281979AA5A}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
