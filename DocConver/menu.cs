@@ -42,7 +42,6 @@ namespace DocConver
             conn.Show();
         }
 
-
         private void testConnection(object sender, EventArgs e)
         {
             try

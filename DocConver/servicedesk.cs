@@ -44,7 +44,8 @@ namespace DocConver
             }
         }
 
-        private void excelUploadentToDatabase(object sender, EventArgs e) //het uploaden van excel gegenes naar dbo.helpdesk
+        //het uploaden van excel gegenes naar dbo.helpdesk
+        private void excelUploadentToDatabase(object sender, EventArgs e)
         {
             try
             {
@@ -61,8 +62,8 @@ namespace DocConver
             }
         }
 
-
-        private void emptyData(object sender, EventArgs e) //verwijder de data van dbo.helpDesk
+        //verwijder de data van dbo.helpDesk
+        private void emptyData(object sender, EventArgs e)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -77,8 +78,8 @@ namespace DocConver
             }
         }
 
-
-        private void selectFile(object sender, EventArgs e) //Krijg de link van het excel bestand
+        //Krijg de link van het excel bestand
+        private void selectFile(object sender, EventArgs e) 
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -106,8 +107,8 @@ namespace DocConver
                     for (int col = 1; col <= range.Columns.Count; col++)
                     {
                         //Sommige waarde in het excelblad zijn niet wat we willen
-                        //dus die moet uitsluiten in de for-loop
-                        if (row >= y && col == range.Columns.Count) // y.Value is het aantal rijen dat ik wil weglaten.
+                        // y.Value is het aantal rijen dat ik wil weglaten.
+                        if (row >= y && col == range.Columns.Count)
                         {
                             String query = "INSERT INTO helpDesk (#, Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
                                 "VALUES(@#, @bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
@@ -174,6 +175,5 @@ namespace DocConver
                 MessageBox.Show("data has been send");
             }
         }
-
     }
 }

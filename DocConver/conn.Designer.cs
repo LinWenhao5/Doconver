@@ -36,9 +36,9 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(53, 117);
+            this.button7.Location = new System.Drawing.Point(33, 107);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(105, 23);
+            this.button7.Size = new System.Drawing.Size(134, 41);
             this.button7.TabIndex = 33;
             this.button7.Text = "Create SQL table";
             this.button7.UseVisualStyleBackColor = true;
@@ -46,9 +46,9 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(53, 88);
+            this.button6.Location = new System.Drawing.Point(33, 62);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(105, 23);
+            this.button6.Size = new System.Drawing.Size(134, 39);
             this.button6.TabIndex = 32;
             this.button6.Text = "Save";
             this.button6.UseVisualStyleBackColor = true;
@@ -56,7 +56,7 @@
             // 
             // cs
             // 
-            this.cs.Location = new System.Drawing.Point(55, 62);
+            this.cs.Location = new System.Drawing.Point(35, 36);
             this.cs.Name = "cs";
             this.cs.Size = new System.Drawing.Size(132, 20);
             this.cs.TabIndex = 31;
@@ -64,7 +64,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(55, 46);
+            this.label8.Location = new System.Drawing.Point(35, 20);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(87, 13);
             this.label8.TabIndex = 30;
@@ -74,7 +74,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(222, 182);
+            this.ClientSize = new System.Drawing.Size(208, 182);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.cs);

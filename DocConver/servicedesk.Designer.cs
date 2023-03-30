@@ -43,7 +43,7 @@
             // 
             this.button1.Location = new System.Drawing.Point(13, 76);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(102, 23);
+            this.button1.Size = new System.Drawing.Size(101, 55);
             this.button1.TabIndex = 0;
             this.button1.Text = "Uploaden";
             this.button1.UseVisualStyleBackColor = true;
@@ -51,11 +51,11 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(12, 126);
+            this.button2.Location = new System.Drawing.Point(120, 76);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(132, 23);
+            this.button2.Size = new System.Drawing.Size(102, 55);
             this.button2.TabIndex = 1;
-            this.button2.Text = "TRUNCATE TABLE data";
+            this.button2.Text = "Tabel leegmaken";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.emptyData);
             // 
@@ -77,9 +77,9 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(251, 25);
+            this.button4.Location = new System.Drawing.Point(241, 28);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(69, 23);
+            this.button4.Size = new System.Drawing.Size(69, 20);
             this.button4.TabIndex = 12;
             this.button4.Text = "Selecteer";
             this.button4.UseVisualStyleBackColor = true;
@@ -89,14 +89,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(479, 178);
+            this.ClientSize = new System.Drawing.Size(349, 158);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.iPath);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Name = "servicedesk";
-            this.Text = "s";
+            this.Text = "servicedesk";
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
