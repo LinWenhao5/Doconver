@@ -30,18 +30,8 @@ namespace DocConver
 
         public servicedesk()
         {
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    InitializeComponent();
-                    connection.Open();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+
+            InitializeComponent();        
         }
 
         //het uploaden van excel gegenes naar dbo.helpdesk
@@ -49,12 +39,8 @@ namespace DocConver
         {
             try
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                   Thread uploaden = new Thread(() => servicedesk.uploaden(connectionString, iPath.Text, 3, 4));
-                   uploaden.Start();
-                   MessageBox.Show("Het uploaden van de gegevens is beginnen...");
-                }
+                Thread uploaden = new Thread(() => servicedesk.uploaden(connectionString, iPath.Text, 3, 4));
+                uploaden.Start();
             }
             catch (Exception ex)
             {
@@ -65,17 +51,25 @@ namespace DocConver
         //verwijder de data van dbo.helpDesk
         private void emptyData(object sender, EventArgs e)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
 
-                String Query = "TRUNCATE TABLE helpDesk";
-                SqlCommand cmd = new SqlCommand(Query, connection);
-                cmd.ExecuteNonQuery();
+                    String Query = ConfigurationManager.AppSettings["DeleteHelpDesk"];
+                    SqlCommand cmd = new SqlCommand(Query, connection);
+                    cmd.ExecuteNonQuery();
 
-                connection.Close();
-                MessageBox.Show("data has been cleared");
+                    connection.Close();
+                    MessageBox.Show("data has been cleared");
+                }
             }
+            catch (Exception ex)
+            { 
+                MessageBox.Show(ex.Message);
+            }
+            
         }
 
         //Krijg de link van het excel bestand
@@ -93,86 +87,90 @@ namespace DocConver
 
         public static void uploaden(string connectionString, string path, int x, int y)
         {
-            Excel.Application excelApp = new Excel.Application();
-            Excel.Workbook workbook = excelApp.Workbooks.Open(path);
-            Excel.Worksheet worksheet = workbook.Worksheets[1];
-            Excel.Range range = worksheet.UsedRange;
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            try
             {
-                connection.Open();
-
-                for (int row = 1; row <= range.Rows.Count; row++)
+                Excel.Application excelApp = new Excel.Application();
+                Excel.Workbook workbook = excelApp.Workbooks.Open(path);
+                Excel.Worksheet worksheet = workbook.Worksheets[1];
+                Excel.Range range = worksheet.UsedRange;
+                using (SqlConnection connection = new SqlConnection(connectionString))
                 {
-                    for (int col = 1; col <= range.Columns.Count; col++)
-                    {
-                        //Sommige waarde in het excelblad zijn niet wat we willen
-                        // y.Value is het aantal rijen dat ik wil weglaten.
-                        if (row >= y && col == range.Columns.Count)
-                        {
-                            String query = "INSERT INTO helpDesk (#, Bedrijf, Title, [Naam verzoeker], Urgentie, [Tijd indienen verzoek], [Tijd sluiting], Status, Categorie, Subcategorie, [Type serviceverzoek] ,[Time to Respond], [Time to Repair], [Total Activities time])" +
-                                "VALUES(@#, @bedrijf,@title,@naam,@urgentie,@tijd_ind_verzoek,@tijd_sluiting,@status,@cate,@subcate,@tpye_service,@time_to_resp,@time_to_repair,@total_act_time)";
+                    connection.Open();
+                    MessageBox.Show("Het uploaden van de gegevens is beginnen...");
 
-                            using (SqlCommand command = new SqlCommand(query, connection))
+                    for (int row = 1; row <= range.Rows.Count; row++)
+                    {
+                        for (int col = 1; col <= range.Columns.Count; col++)
+                        {
+                            //Sommige waarde in het excelblad zijn niet wat we willen
+                            // y.Value is het aantal rijen dat ik wil weglaten.
+                            if (row >= y && col == range.Columns.Count)
                             {
-                                //x.Value is het aantal kolom dat ik wil weglaten.
-                                string[] value = new string[14];
-                                DateTime? tijd_ind = null;
-                                DateTime? tijd_slu = null;
-                                for (int i = 0; i <= 13; i++)
+                                String query = ConfigurationManager.AppSettings["InsertHelpDesk"];
+                                using (SqlCommand command = new SqlCommand(query, connection))
                                 {
-                                    if (i == 4)
+                                    //x.Value is het aantal kolom dat ik wil weglaten.
+                                    string[] value = new string[14];
+                                    DateTime? tijd_ind = null;
+                                    DateTime? tijd_slu = null;
+                                    for (int i = 0; i <= 13; i++)
                                     {
-                                        value[i] = range.Cells[row, x + i].value2;
-                                        if (value[i] != null)
+                                        if (i == 4)
                                         {
-                                            tijd_ind = DateTime.Parse(value[i]);
+                                            value[i] = range.Cells[row, x + i].value2;
+                                            if (value[i] != null)
+                                            {
+                                                tijd_ind = DateTime.Parse(value[i]);
+                                            }
+                                        }
+                                        else if (i == 5)
+                                        {
+                                            value[i] = range.Cells[row, x + i].value2;
+                                            if (value[i] != null)
+                                            {
+                                                tijd_slu = DateTime.Parse(value[i]);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            value[i] = range.Cells[row, x + i].value2;
                                         }
                                     }
-                                    else if (i == 5)
+                                    command.Parameters.AddWithValue("@#", range.Cells[row, 1].value2);
+                                    command.Parameters.AddWithValue("@bedrijf", "" + value[0] + "");
+                                    command.Parameters.AddWithValue("@title", "" + value[1] + "");
+                                    command.Parameters.AddWithValue("@naam", "" + value[2] + "");
+                                    command.Parameters.AddWithValue("@urgentie", "" + value[3] + "");
+                                    command.Parameters.AddWithValue("@tijd_ind_verzoek", tijd_ind);
+                                    if (tijd_slu == null)
                                     {
-                                        value[i] = range.Cells[row, x + i].value2;
-                                        if (value[i] != null)
-                                        {
-                                            tijd_slu = DateTime.Parse(value[i]);
-                                        }
+                                        command.Parameters.AddWithValue("@tijd_sluiting", DBNull.Value);
                                     }
                                     else
                                     {
-                                        value[i] = range.Cells[row, x + i].value2;
+                                        command.Parameters.AddWithValue("@tijd_sluiting", tijd_slu);
                                     }
+                                    command.Parameters.AddWithValue("@status", "" + value[6] + "");
+                                    command.Parameters.AddWithValue("@cate", "" + value[7] + "");
+                                    command.Parameters.AddWithValue("@subcate", "" + value[8] + "");
+                                    command.Parameters.AddWithValue("@tpye_service", "" + value[9] + "");
+                                    command.Parameters.AddWithValue("@time_to_resp", "" + value[10] + "");
+                                    command.Parameters.AddWithValue("@time_to_repair", "" + value[11] + "");
+                                    command.Parameters.AddWithValue("@total_act_time", "" + value[12] + "");
+                                    command.ExecuteNonQuery();
                                 }
-                                command.Parameters.AddWithValue("@#", range.Cells[row, 1].value2);
-                                command.Parameters.AddWithValue("@bedrijf", "" + value[0] + "");
-                                command.Parameters.AddWithValue("@title", "" + value[1] + "");
-                                command.Parameters.AddWithValue("@naam", "" + value[2] + "");
-                                command.Parameters.AddWithValue("@urgentie", "" + value[3] + "");
-                                command.Parameters.AddWithValue("@tijd_ind_verzoek", tijd_ind);
-                                if (tijd_slu == null)
-                                {
-                                    command.Parameters.AddWithValue("@tijd_sluiting", DBNull.Value);
-                                }
-                                else
-                                {
-                                    command.Parameters.AddWithValue("@tijd_sluiting", tijd_slu);
-                                }
-                                command.Parameters.AddWithValue("@status", "" + value[6] + "");
-                                command.Parameters.AddWithValue("@cate", "" + value[7] + "");
-                                command.Parameters.AddWithValue("@subcate", "" + value[8] + "");
-                                command.Parameters.AddWithValue("@tpye_service", "" + value[9] + "");
-                                command.Parameters.AddWithValue("@time_to_resp", "" + value[10] + "");
-                                command.Parameters.AddWithValue("@time_to_repair", "" + value[11] + "");
-                                command.Parameters.AddWithValue("@total_act_time", "" + value[12] + "");
-                                command.ExecuteNonQuery();
                             }
-                        }
 
+                        }
                     }
+                    connection.Close();
+                    workbook.Close();
+                    excelApp.Quit();
+                    MessageBox.Show("data has been send");
                 }
-                connection.Close();
-                workbook.Close();
-                excelApp.Quit();
-                MessageBox.Show("data has been send");
+            } catch (Exception ex)
+            {
+               MessageBox.Show(ex.Message);
             }
         }
     }
