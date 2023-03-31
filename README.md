@@ -12,7 +12,7 @@ Hulpmiddelen voor het lezen van bestandsgegevens
 
 ## How to use？
 
-1. Download [setup1.msi](https://github.com/LinWenhao5/Doconver/releases/tag/doconver)
+1. Download [Doconver.msi](https://github.com/LinWenhao5/Doconver/releases/tag/doconver)
 
 2. Als er een waarschuwing verschijnt, selecteer dan doorgaan.
 
